@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Financial Calculator</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #e0f7fa;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: 50px auto;
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #1ba226;
+            margin-bottom: 40px;
+            font-size: 32px;
+        }
+
+        .calculator {
+            margin-bottom: 40px;
+            padding: 20px;
+            border: 2px solid #00796b;
+            border-radius: 8px;
+            background-color: #f0f4c3;
+        }
+
+        .calculator h2 {
+            margin-bottom: 20px;
+            color: #004d40;
+            font-size: 24px;
+        }
+
+        label {
+            display: block;
+            margin-top: 10px;
+            font-weight: bold;
+            color: #00796b;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border: 1px solid #00796b;
+            border-radius: 5px;
+            background-color: #e0f2f1;
+            font-size: 16px;
+        }
+
+        button {
+            margin-top: 20px;
+            padding: 15px;
+            width: 100%;
+            background-color: #00796b;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 18px;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #004d40;
+        }
+
+        p {
+            margin-top: 20px;
+            font-size: 18px;
+            color: #004d40;
+            font-weight: bold;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Financial Calculator</h1>
+
+        <!-- EMI Calculator -->
+        <div class="calculator">
+            <h2><i class="fas fa-calculator"></i> EMI Calculator</h2>
+            <label for="loanAmount">Loan Amount:</label>
+            <input type="number" id="loanAmount" placeholder="Enter loan amount" min="0">
+            
+            <label for="interestRate">Interest Rate (%):</label>
+            <input type="number" id="interestRate" placeholder="Enter interest rate" step="0.01" min="0">
+            
+            <label for="loanTenure">Loan Tenure (years):</label>
+            <input type="number" id="loanTenure" placeholder="Enter loan tenure in years" min="0">
+            
+            <button onclick="calculateEMI()">Calculate EMI</button>
+            <p id="emiResult"></p>
+        </div>
+
+        <!-- Home Loan Calculator -->
+        <div class="calculator">
+            <h2><i class="fas fa-home"></i> Home Loan Calculator</h2>
+            <label for="homeLoanAmount">Home Loan Amount:</label>
+            <input type="number" id="homeLoanAmount" placeholder="Enter home loan amount" min="0">
+            
+            <label for="homeInterestRate">Interest Rate (%):</label>
+            <input type="number" id="homeInterestRate" placeholder="Enter interest rate" step="0.01" min="0">
+            
+            <label for="homeLoanTenure">Loan Tenure (years):</label>
+            <input type="number" id="homeLoanTenure" placeholder="Enter loan tenure in years" min="0">
+            
+            <button onclick="calculateHomeLoan()">Calculate Home Loan</button>
+            <p id="homeLoanResult"></p>
+        </div>
+
+        <!-- Education Loan Calculator -->
+        <div class="calculator">
+            <h2><i class="fas fa-graduation-cap"></i> Education Loan Calculator</h2>
+            <label for="eduLoanAmount">Education Loan Amount:</label>
+            <input type="number" id="eduLoanAmount" placeholder="Enter education loan amount" min="0">
+            
+            <label for="eduInterestRate">Interest Rate (%):</label>
+            <input type="number" id="eduInterestRate" placeholder="Enter interest rate" step="0.01" min="0">
+            
+            <label for="eduLoanTenure">Loan Tenure (years):</label>
+            <input type="number" id="eduLoanTenure" placeholder="Enter loan tenure in years" min="0">
+            
+            <button onclick="calculateEducationLoan()">Calculate Education Loan</button>
+            <p id="educationLoanResult"></p>
+        </div>
+
+        <!-- Monthly Expenditure Calculator -->
+        <div class="calculator">
+            <h2><i class="fas fa-wallet"></i> Monthly Expenditure Calculator</h2>
+            <label for="income">Monthly Income:</label>
+            <input type="number" id="income" placeholder="Enter your monthly income" min="0">
+            
+            <label for="expenditure">Monthly Expenditure:</label>
+            <input type="number" id="expenditure" placeholder="Enter your monthly expenditure" min="0">
+            
+            <button onclick="calculateExpenditure()">Calculate Expenditure</button>
+            <p id="expenditureResult"></p>
+        </div>
+
+        <!-- Savings Calculator -->
+        <div class="calculator">
+            <h2><i class="fas fa-piggy-bank"></i> Savings Calculator</h2>
+            <label for="savings">Monthly Savings:</label>
+            <input type="number" id="savings" placeholder="Enter your monthly savings" min="0">
+            
+            <label for="years">Years:</label>
+            <input type="number" id="years" placeholder="Enter the number of years" min="0">
+            
+            <button onclick="calculateSavings()">Calculate Savings</button>
+            <p id="savingsResult"></p>
+        </div>
+    </div>
+
+    <script>
+        // EMI Calculator
+        function calculateEMI() {
+            const loanAmount = parseFloat(document.getElementById('loanAmount').value);
+            const interestRate = parseFloat(document.getElementById('interestRate').value) / 12 / 100;
+            const loanTenure = parseFloat(document.getElementById('loanTenure').value) * 12;
+
+            if (isNaN(loanAmount) || isNaN(interestRate) || isNaN(loanTenure)) {
+                alert('Please enter valid numbers in all fields');
+                return;
+            }
+
+            const emi = loanAmount * interestRate * (Math.pow(1 + interestRate, loanTenure) / (Math.pow(1 + interestRate, loanTenure) - 1));
+            document.getElementById('emiResult').innerHTML = `Monthly EMI: ₹${emi.toFixed(2)}`;
+        }
+
+        // Home Loan Calculator
+        function calculateHomeLoan() {
+            const loanAmount = parseFloat(document.getElementById('homeLoanAmount').value);
+            const interestRate = parseFloat(document.getElementById('homeInterestRate').value) / 12 / 100;
+            const loanTenure = parseFloat(document.getElementById('homeLoanTenure').value) * 12;
+
+            if (isNaN(loanAmount) || isNaN(interestRate) || isNaN(loanTenure)) {
+                alert('Please enter valid numbers in all fields');
+                return;
+            }
+
+            const emi = loanAmount * interestRate * (Math.pow(1 + interestRate, loanTenure) / (Math.pow(1 + interestRate, loanTenure) - 1));
+            document.getElementById('homeLoanResult').innerHTML = `Monthly Home Loan EMI: ₹${emi.toFixed(2)}`;
+        }
+
+        // Education Loan Calculator
+        function calculateEducationLoan() {
+            const loanAmount = parseFloat(document.getElementById('eduLoanAmount').value);
+            const interestRate = parseFloat(document.getElementById('eduInterestRate').value) / 12 / 100;
+            const loanTenure = parseFloat(document.getElementById('eduLoanTenure').value) * 12;
+
+            if (isNaN(loanAmount) || isNaN(interestRate) || isNaN(loanTenure)) {
+                alert('Please enter valid numbers in all fields');
+                return;
+            }
+
+            const emi = loanAmount * interestRate * (Math.pow(1 + interestRate, loanTenure) / (Math.pow(1 + interestRate, loanTenure) - 1));
+            document.getElementById('educationLoanResult').innerHTML = `Monthly Education Loan EMI: ₹${emi.toFixed(2)}`;
+        }
+
+        // Monthly Expenditure Calculator
+        function calculateExpenditure() {
+            const income = parseFloat(document.getElementById('income').value);
+            const expenditure = parseFloat(document.getElementById('expenditure').value);
+
+            if (isNaN(income) || isNaN(expenditure)) {
+                alert('Please enter valid numbers in all fields');
+                return;
+            }
+
+            const remaining = income - expenditure;
+            document.getElementById('expenditureResult').innerHTML = `Remaining Balance: ₹${remaining.toFixed(2)}`;
+        }
+
+        // Savings Calculator
+        function calculateSavings() {
+            const savings = parseFloat(document.getElementById('savings').value);
+            const years = parseFloat(document.getElementById('years').value);
+
+            if (isNaN(savings) || isNaN(years)) {
+                alert('Please enter valid numbers in all fields');
+                return;
+            }
+
+            const totalSavings = savings * 12 * years;
+            document.getElementById('savingsResult').innerHTML = `Total Savings in ${years} Years: ₹${totalSavings.toFixed(2)}`;
+        }
+    </script>
+</body>
+</html>
